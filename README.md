@@ -1,1 +1,1 @@
-# MathBlaster
+# UMKC Summer Camp
