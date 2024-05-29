@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine.Events;
 using UnityEngine;
-using System.Collections.Generic;
 
 public class MoveBetweenLocations : MonoBehaviour {
     // How often to update the position while moving
@@ -16,7 +15,6 @@ public class MoveBetweenLocations : MonoBehaviour {
     public int currentLocationIndex = 0;
     private IEnumerator moveToCoroutine;
     private bool isMoving = false;
-    public List<Transform> transformsToOffset;
     // Events
     public UnityEvent onStartedMoving, onChangedTarget, onReachedLocation;
     public void MoveToPosition(Vector3 position) {
@@ -63,26 +61,11 @@ public class MoveBetweenLocations : MonoBehaviour {
         float endTime = startTime + timeToReachTarget;
         while (Time.time < endTime) {
             float fractionOfJourney = (Time.time - startTime) / timeToReachTarget;
-            Vector3 step = Vector3.Lerp(startPosition, targetPosition, fractionOfJourney);
-            foreach (Transform child in transformsToOffset)
-                child.transform.position += step - transform.position;
-            transform.position = step;
+            transform.position = Vector3.Lerp(startPosition, targetPosition, fractionOfJourney);
             yield return new WaitForSeconds(UpdateFrequency);
         }
         transform.position = targetPosition;
         isMoving = false;
         onReachedLocation.Invoke();
-    }
-
-    public void AddTransformToOffset(Transform newChild)
-    {
-        if (transformsToOffset.Contains(newChild))
-            return;
-        transformsToOffset.Add(newChild);
-    }
-    public void RemoveTransformToOffset(Transform transformToRemove)
-    {
-        if (transformsToOffset.Contains(transformToRemove))
-            transformsToOffset.Remove(transformToRemove);
     }
 }

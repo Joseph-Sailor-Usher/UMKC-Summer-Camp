@@ -22,9 +22,9 @@ public class Condition : MonoBehaviour, ICondition {
         } else {
             isMet = value;
             if(value) {
-                onBecomesTrue.Invoke();
-            } else {
                 onBecomesFalse.Invoke();
+            } else {
+                onBecomesTrue.Invoke();
             }
         }
     }
